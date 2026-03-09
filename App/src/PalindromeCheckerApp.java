@@ -1,76 +1,34 @@
 // version 1.0
 // author Abc
-// useCase 8: Linked List Based Palindrome Checker
-
-class Node {
-    char data;
-    Node next;
-
-    Node(char data) {
-        this.data = data;
-        this.next = null;
-    }
-}
+// useCase 9: Recursive Palindrome Checker
 
 public class PalindromeCheckerApp {
 
+    // recursive method to check palindrome
+    public static boolean isPalindrome(String str, int start, int end) {
+
+        // base condition
+        if (start >= end) {
+            return true;
+        }
+
+        // compare characters
+        if (str.charAt(start) != str.charAt(end)) {
+            return false;
+        }
+
+        // recursive call
+        return isPalindrome(str, start + 1, end - 1);
+    }
+
     public static void main(String[] args) {
 
-        String word = "madam"; // sample string
+        String word = "level"; // sample string
 
-        // convert string to linked list
-        Node head = null;
-        Node tail = null;
-
-        for (int i = 0; i < word.length(); i++) {
-            Node newNode = new Node(word.charAt(i));
-
-            if (head == null) {
-                head = newNode;
-                tail = newNode;
-            } else {
-                tail.next = newNode;
-                tail = newNode;
-            }
-        }
-
-        // find middle using fast and slow pointers
-        Node slow = head;
-        Node fast = head;
-
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-
-        // reverse second half
-        Node prev = null;
-        Node current = slow;
-
-        while (current != null) {
-            Node nextNode = current.next;
-            current.next = prev;
-            prev = current;
-            current = nextNode;
-        }
-
-        // compare halves
-        Node firstHalf = head;
-        Node secondHalf = prev;
-
-        boolean isPalindrome = true;
-
-        while (secondHalf != null) {
-            if (firstHalf.data != secondHalf.data) {
-                isPalindrome = false;
-                break;
-            }
-            firstHalf = firstHalf.next;
-            secondHalf = secondHalf.next;
-        }
+        boolean result = isPalindrome(word, 0, word.length() - 1);
 
         // print result
-        if (isPalindrome) {
+        if (result) {
             System.out.println("The string '" + word + "' is a Palindrome.");
         } else {
             System.out.println("The string '" + word + "' is NOT a Palindrome.");
