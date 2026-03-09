@@ -6,17 +6,20 @@ public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
-        String word = "radar";   // sample string
-        char[] characters = word.toCharArray();
+        String word = "radar"; // sample string
+
+        // convert string to character array
+        char[] chars = word.toCharArray();
 
         int start = 0;
-        int end = characters.length - 1;
+        int end = chars.length - 1;
         boolean isPalindrome = true;
 
-        // two-pointer comparison
+        // two-pointer approach
         while (start < end) {
 
-            if (characters[start] != characters[end]) {
+            // compare characters
+            if (chars[start] != chars[end]) {
                 isPalindrome = false;
                 break;
             }
