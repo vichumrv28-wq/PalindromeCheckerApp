@@ -1,29 +1,63 @@
 // version 1.0
 // author Abc
-// useCase 11: Object-Oriented Palindrome Service
+// useCase 12: Strategy Pattern for Palindrome Algorithms
 
 import java.util.Stack;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
-class PalindromeChecker {
+// Strategy interface
+interface PalindromeStrategy {
+    boolean checkPalindrome(String word);
+}
 
-    // method to check palindrome using stack
+// Stack-based strategy
+class StackStrategy implements PalindromeStrategy {
+
+    @Override
     public boolean checkPalindrome(String word) {
-
         Stack<Character> stack = new Stack<>();
-
-        // push characters into stack
-        for (int i = 0; i < word.length(); i++) {
-            stack.push(word.charAt(i));
+        for (char ch : word.toCharArray()) {
+            stack.push(ch);
         }
-
-        // pop and compare
-        for (int i = 0; i < word.length(); i++) {
-            if (word.charAt(i) != stack.pop()) {
+        for (char ch : word.toCharArray()) {
+            if (ch != stack.pop()) {
                 return false;
             }
         }
-
         return true;
+    }
+}
+
+// Deque-based strategy
+class DequeStrategy implements PalindromeStrategy {
+
+    @Override
+    public boolean checkPalindrome(String word) {
+        Deque<Character> deque = new ArrayDeque<>();
+        for (char ch : word.toCharArray()) {
+            deque.addLast(ch);
+        }
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+// Context class to use strategy
+class PalindromeContext {
+    private PalindromeStrategy strategy;
+
+    // inject strategy at runtime
+    public void setStrategy(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public boolean executeStrategy(String word) {
+        return strategy.checkPalindrome(word);
     }
 }
 
@@ -31,19 +65,19 @@ public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
-        String word = "level"; // sample string
+        String word = "racecar"; // sample string
 
-        // create object of PalindromeChecker
-        PalindromeChecker checker = new PalindromeChecker();
+        PalindromeContext context = new PalindromeContext();
 
-        boolean result = checker.checkPalindrome(word);
+        // dynamically choose Stack strategy
+        context.setStrategy(new StackStrategy());
+        boolean resultStack = context.executeStrategy(word);
+        System.out.println("Using StackStrategy: " + (resultStack ? "Palindrome" : "Not Palindrome"));
 
-        // print result
-        if (result) {
-            System.out.println("The string '" + word + "' is a Palindrome.");
-        } else {
-            System.out.println("The string '" + word + "' is NOT a Palindrome.");
-        }
+        // dynamically choose Deque strategy
+        context.setStrategy(new DequeStrategy());
+        boolean resultDeque = context.executeStrategy(word);
+        System.out.println("Using DequeStrategy: " + (resultDeque ? "Palindrome" : "Not Palindrome"));
 
     }
 
