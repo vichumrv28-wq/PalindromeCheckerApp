@@ -1,83 +1,57 @@
 // version 1.0
 // author Abc
-// useCase 12: Strategy Pattern for Palindrome Algorithms
+// useCase 13: Performance Comparison of Palindrome Algorithms
 
 import java.util.Stack;
 import java.util.Deque;
 import java.util.ArrayDeque;
 
-// Strategy interface
-interface PalindromeStrategy {
-    boolean checkPalindrome(String word);
-}
-
-// Stack-based strategy
-class StackStrategy implements PalindromeStrategy {
-
-    @Override
-    public boolean checkPalindrome(String word) {
-        Stack<Character> stack = new Stack<>();
-        for (char ch : word.toCharArray()) {
-            stack.push(ch);
-        }
-        for (char ch : word.toCharArray()) {
-            if (ch != stack.pop()) {
-                return false;
-            }
-        }
-        return true;
-    }
-}
-
-// Deque-based strategy
-class DequeStrategy implements PalindromeStrategy {
-
-    @Override
-    public boolean checkPalindrome(String word) {
-        Deque<Character> deque = new ArrayDeque<>();
-        for (char ch : word.toCharArray()) {
-            deque.addLast(ch);
-        }
-        while (deque.size() > 1) {
-            if (deque.removeFirst() != deque.removeLast()) {
-                return false;
-            }
-        }
-        return true;
-    }
-}
-
-// Context class to use strategy
-class PalindromeContext {
-    private PalindromeStrategy strategy;
-
-    // inject strategy at runtime
-    public void setStrategy(PalindromeStrategy strategy) {
-        this.strategy = strategy;
-    }
-
-    public boolean executeStrategy(String word) {
-        return strategy.checkPalindrome(word);
-    }
-}
-
 public class PalindromeCheckerApp {
+
+    // Stack-based palindrome checker
+    public static boolean stackPalindrome(String word) {
+        Stack<Character> stack = new Stack<>();
+        for (char ch : word.toCharArray()) stack.push(ch);
+        for (char ch : word.toCharArray()) if (ch != stack.pop()) return false;
+        return true;
+    }
+
+    // Deque-based palindrome checker
+    public static boolean dequePalindrome(String word) {
+        Deque<Character> deque = new ArrayDeque<>();
+        for (char ch : word.toCharArray()) deque.addLast(ch);
+        while (deque.size() > 1) if (deque.removeFirst() != deque.removeLast()) return false;
+        return true;
+    }
+
+    // String reverse-based palindrome checker
+    public static boolean reversePalindrome(String word) {
+        String reversed = "";
+        for (int i = word.length() - 1; i >= 0; i--) reversed += word.charAt(i);
+        return word.equals(reversed);
+    }
 
     public static void main(String[] args) {
 
-        String word = "racecar"; // sample string
+        String word = "a".repeat(100000); // large test string
 
-        PalindromeContext context = new PalindromeContext();
+        // Stack method timing
+        long startStack = System.nanoTime();
+        stackPalindrome(word);
+        long endStack = System.nanoTime();
+        System.out.println("Stack method time: " + (endStack - startStack) + " ns");
 
-        // dynamically choose Stack strategy
-        context.setStrategy(new StackStrategy());
-        boolean resultStack = context.executeStrategy(word);
-        System.out.println("Using StackStrategy: " + (resultStack ? "Palindrome" : "Not Palindrome"));
+        // Deque method timing
+        long startDeque = System.nanoTime();
+        dequePalindrome(word);
+        long endDeque = System.nanoTime();
+        System.out.println("Deque method time: " + (endDeque - startDeque) + " ns");
 
-        // dynamically choose Deque strategy
-        context.setStrategy(new DequeStrategy());
-        boolean resultDeque = context.executeStrategy(word);
-        System.out.println("Using DequeStrategy: " + (resultDeque ? "Palindrome" : "Not Palindrome"));
+        // Reverse method timing
+        long startReverse = System.nanoTime();
+        reversePalindrome(word);
+        long endReverse = System.nanoTime();
+        System.out.println("String Reverse method time: " + (endReverse - startReverse) + " ns");
 
     }
 
