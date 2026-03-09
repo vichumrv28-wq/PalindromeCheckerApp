@@ -1,24 +1,24 @@
 // version 1.0
 // author Abc
-// useCase 2: Print Hardcoded Palindrome Result
+// useCase 3: Palindrome Check Using String Reverse
 
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
-        String word = "madam"; // hardcoded string
+        String original = "level";   // sample string
         String reversed = "";
 
-        // reverse the string
-        for(int i = word.length() - 1; i >= 0; i--) {
-            reversed = reversed + word.charAt(i);
+        // reverse string using loop
+        for (int i = original.length() - 1; i >= 0; i--) {
+            reversed = reversed + original.charAt(i);
         }
 
-        // check palindrome
-        if(word.equals(reversed)) {
-            System.out.println("The word '" + word + "' is a Palindrome.");
+        // compare original and reversed
+        if (original.equals(reversed)) {
+            System.out.println("The string '" + original + "' is a Palindrome.");
         } else {
-            System.out.println("The word '" + word + "' is NOT a Palindrome.");
+            System.out.println("The string '" + original + "' is NOT a Palindrome.");
         }
 
     }
