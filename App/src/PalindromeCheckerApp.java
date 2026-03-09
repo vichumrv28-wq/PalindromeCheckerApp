@@ -1,79 +1,35 @@
 // version 1.0
 // author Abc
-// useCase 8: Linked List Based Palindrome Checker
-
-class Node {
-    char data;
-    Node next;
-
-    Node(char data) {
-        this.data = data;
-        this.next = null;
-    }
-}
+// useCase 10: Case-Insensitive & Space-Ignored Palindrome
 
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
-        String word = "madam"; // sample string
+        String word = "A man a plan a canal Panama"; // sample string
 
-        // convert string to linked list
-        Node head = null;
-        Node tail = null;
+        // normalize string: remove spaces and convert to lowercase
+        String normalized = word.replaceAll("\\s+", "").toLowerCase();
 
-        for (int i = 0; i < word.length(); i++) {
-            Node newNode = new Node(word.charAt(i));
-
-            if (head == null) {
-                head = newNode;
-                tail = newNode;
-            } else {
-                tail.next = newNode;
-                tail = newNode;
-            }
-        }
-
-        // find middle using fast and slow pointers
-        Node slow = head;
-        Node fast = head;
-
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-
-        // reverse second half
-        Node prev = null;
-        Node current = slow;
-
-        while (current != null) {
-            Node nextNode = current.next;
-            current.next = prev;
-            prev = current;
-            current = nextNode;
-        }
-
-        // compare halves
-        Node firstHalf = head;
-        Node secondHalf = prev;
-
+        // check palindrome using previous loop logic
         boolean isPalindrome = true;
+        int start = 0;
+        int end = normalized.length() - 1;
 
-        while (secondHalf != null) {
-            if (firstHalf.data != secondHalf.data) {
+        while (start < end) {
+            if (normalized.charAt(start) != normalized.charAt(end)) {
                 isPalindrome = false;
                 break;
             }
-            firstHalf = firstHalf.next;
-            secondHalf = secondHalf.next;
+            start++;
+            end--;
         }
 
         // print result
         if (isPalindrome) {
-            System.out.println("The string '" + word + "' is a Palindrome.");
+            System.out.println("The string '" + word + "' is a Palindrome (ignoring spaces and case).");
         } else {
-            System.out.println("The string '" + word + "' is NOT a Palindrome.");
+            System.out.println("The string '" + word + "' is NOT a Palindrome (ignoring spaces and case).");
         }
 
     }
