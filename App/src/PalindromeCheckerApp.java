@@ -1,34 +1,42 @@
 // version 1.0
 // author Abc
-// useCase 4: Character Array Based Palindrome Check
+// useCase 6: Queue + Stack Based Palindrome Check
+
+import java.util.Stack;
+import java.util.Queue;
+import java.util.LinkedList;
 
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
-        String word = "radar"; // sample string
+        String word = "level"; // sample string
 
-        // convert string to character array
-        char[] chars = word.toCharArray();
+        Stack<Character> stack = new Stack<>();
+        Queue<Character> queue = new LinkedList<>();
 
-        int start = 0;
-        int end = chars.length - 1;
+        // push to stack and enqueue to queue
+        for (int i = 0; i < word.length(); i++) {
+            char ch = word.charAt(i);
+            stack.push(ch);
+            queue.add(ch);
+        }
+
         boolean isPalindrome = true;
 
-        // two-pointer approach
-        while (start < end) {
+        // compare dequeue vs pop
+        while (!stack.isEmpty() && !queue.isEmpty()) {
 
-            // compare characters
-            if (chars[start] != chars[end]) {
+            char fromStack = stack.pop();
+            char fromQueue = queue.remove();
+
+            if (fromStack != fromQueue) {
                 isPalindrome = false;
                 break;
             }
-
-            start++;
-            end--;
         }
 
-        // display result
+        // print result
         if (isPalindrome) {
             System.out.println("The string '" + word + "' is a Palindrome.");
         } else {
